@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Start Your Journey</title>
   <style>
-    /* Add styles here for your form, buttons, etc. */
     body {
       font-family: sans-serif;
       margin: 0;
@@ -86,7 +85,7 @@
 </header>
 <main>
   <section>
-    <h2>Apply toXXX Begin</h2>
+    <h2>Apply to Begin</h2>
     <form id="journeyForm">
       <div class="input-row">
         <label for="name">Name:</label>
@@ -110,7 +109,7 @@
 <footer><p>&copy; 2025 Role-to-Entity™. All rights reserved.</p></footer>
 
 <script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbyDfLwPZ28o_w-h1L_t_JqcToPV73wFxQVvy07T_WCc/dev';
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbyDfLwPZ28o_w-h1L_t_JqcToPV73wFxQVvy07T_WCc/dev'; // Update with your Apps Script URL
 
   function previewInput() {
     const name = document.getElementById('name').value.trim();
@@ -145,7 +144,7 @@
     })
     .then(response => response.json())
     .then(data => {
-      if (data.result === 'success') {
+      if (data.result === 'Success') {
         alert("Form submitted successfully!");
         document.getElementById('previewBox').style.display = 'none';
         document.getElementById('journeyForm').reset();
