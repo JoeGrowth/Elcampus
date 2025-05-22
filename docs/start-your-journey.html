@@ -3,161 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Start Your Journey</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      background: #f4f4f4;
-      color: #333;
-    }
-    header, footer {
-      background: #222;
-      color: #fff;
-      padding: 1em 2em;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 1em;
-      padding: 0;
-    }
-    nav a {
-      color: #fff;
-      text-decoration: none;
-    }
-    main {
-      padding: 2em;
-      background: #fff;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1em;
-      max-width: 600px;
-    }
-    .input-row {
-      display: flex;
-      gap: 1em;
-      align-items: center;
-    }
-    .input-row label {
-      width: 80px;
-    }
-    .input-row input {
-      flex: 1;
-      padding: 0.5em;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .btn {
-      padding: 0.5em 1em;
-      border: none;
-      border-radius: 4px;
-      background: #007bff;
-      color: white;
-      cursor: pointer;
-    }
-    .btn.modify {
-      background: #ffc107;
-    }
-    .preview {
-      margin-top: 1em;
-      padding: 1em;
-      background: #f0f0f0;
-      border: 1px solid #ccc;
-    }
-  </style>
+  <title>Simple Submission Form</title>
 </head>
 <body>
-<header>
-  <h1>Role-to-Entity™ Platform</h1>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="how-it-works.html">How It Works</a></li>
-      <li><a href="start-your-journey.html">Start</a></li>
-      <li><a href="case-studies.html">Case Studies</a></li>
-      <li><a href="work-with-us.html">Work With Us</a></li>
-      <li><a href="about.html">About</a></li>
-    </ul>
-  </nav>
-</header>
-<main>
-  <section>
-    <h2>Apply to Begin</h2>
-    <form id="journeyForm">
-      <div class="input-row">
-        <label for="name">Name:</label>
-        <input type="text" id="name" required />
-      </div>
-      <div class="input-row">
-        <label for="role">Your Role:</label>
-        <input type="text" id="role" required />
-      </div>
-      <button type="button" class="btn" onclick="previewInput()">Preview</button>
-    </form>
 
-    <div class="preview" id="previewBox" style="display:none;">
-      <p><strong>Name:</strong> <span id="previewName"></span></p>
-      <p><strong>Role:</strong> <span id="previewRole"></span></p>
-      <button class="btn modify" onclick="modifyInput()">Modify</button>
-      <button class="btn" onclick="submitInput()">Submit</button>
-    </div>
-  </section>
-</main>
-<footer><p>&copy; 2025 Role-to-Entity™. All rights reserved.</p></footer>
+  <h1>Submit Your Information</h1>
+  <form id="simpleForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" required />
+    <br /><br />
+    
+    <label for="role">Role:</label>
+    <input type="text" id="role" required />
+    <br /><br />
+    
+    <button type="button" onclick="submitForm()">Submit</button>
+  </form>
 
-<script>
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbx5XLtzmum4ppXq8oD6hzKqgp_xIeNCgPxEJ42C8xVP5sOTZxwRSFgdm7cX94bVZ3G5Lw/exec'; // Update with your Apps Script URL
+  <div id="responseMessage" style="margin-top: 20px;"></div>
 
-  function previewInput() {
-    const name = document.getElementById('name').value.trim();
-    const role = document.getElementById('role').value.trim();
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbx5XLtzmum4ppXq8oD6hzKqgp_xIeNCgPxEJ42C8xVP5sOTZxwRSFgdm7cX94bVZ3G5Lw/exec';
 
-    if (name && role) {
-      document.getElementById('previewName').innerText = name;
-      document.getElementById('previewRole').innerText = role;
-      document.getElementById('journeyForm').style.display = 'none';
-      document.getElementById('previewBox').style.display = 'block';
+    function submitForm() {
+      const name = document.getElementById('name').value;
+      const role = document.getElementById('role').value;
+
+      const data = {
+        name: name,
+        role: role
+      };
+
+      // Send POST request to Google Apps Script
+      fetch(scriptURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(result => {
+        // Show response message from Google Apps Script
+        if (result.result === "success") {
+          document.getElementById('responseMessage').innerHTML = 'Form submitted successfully!';
+        } else {
+          document.getElementById('responseMessage').innerHTML = 'Submission failed. Please try again.';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('responseMessage').innerHTML = 'An error occurred. Please try again.';
+      });
     }
-  }
+  </script>
 
-  function modifyInput() {
-    document.getElementById('previewBox').style.display = 'none';
-    document.getElementById('journeyForm').style.display = 'flex';
-  }
-
-  function submitInput() {
-    const name = document.getElementById('name').value.trim();
-    const role = document.getElementById('role').value.trim();
-
-    const data = { name, role };
-
-    // Use fetch to send POST request to Google Apps Script
-    fetch(scriptURL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.result === 'Success') {
-        alert("Form submitted successfully!");
-        document.getElementById('previewBox').style.display = 'none';
-        document.getElementById('journeyForm').reset();
-        document.getElementById('journeyForm').style.display = 'flex';
-      } else {
-        alert("Submission failed. Try again.");
-      }
-    })
-    .catch(error => {
-      alert("Submission failed. Try again.");
-      console.error('Error:', error);
-    });
-  }
-</script>
 </body>
 </html>
