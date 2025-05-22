@@ -1,62 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple Submission Form</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Data</title>
+    <script>
+        function submitForm() {
+            // Get form values
+            var name = document.getElementById('name').value;
+            var role = document.getElementById('role').value;
+            
+            // Create the request payload
+            var data = {
+                name: name,
+                role: role
+            };
+
+            // Make the POST request to Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbybq54h1K6lP-PJBKtcs5qK5VIzEXUlxnWBbIrpzbZ1xrK2ySNWk4XSIcOiFROebl43bQ/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(responseData => {
+                alert('Data submitted successfully: ' + JSON.stringify(responseData));
+            })
+            .catch(error => {
+                alert('Error submitting data: ' + error);
+            });
+        }
+    </script>
 </head>
 <body>
-
-  <h1>Submit Your Information</h1>
-  <form id="simpleForm">
-    <label for="name">Name:</label>
-    <input type="text" id="name" required />
-    <br /><br />
-    
-    <label for="role">Role:</label>
-    <input type="text" id="role" required />
-    <br /><br />
-    
-    <button type="button" onclick="submitForm()">Submit</button>
-  </form>
-
-  <div id="responseMessage" style="margin-top: 20px;"></div>
-
-  <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbx5XLtzmum4ppXq8oD6hzKqgp_xIeNCgPxEJ42C8xVP5sOTZxwRSFgdm7cX94bVZ3G5Lw/exec';
-
-    function submitForm() {
-      const name = document.getElementById('name').value;
-      const role = document.getElementById('role').value;
-
-      const data = {
-        name: name,
-        role: role
-      };
-
-      // Send POST request to Google Apps Script
-      fetch(scriptURL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      })
-      .then(response => response.json())
-      .then(result => {
-        // Show response message from Google Apps Script
-        if (result.result === "success") {
-          document.getElementById('responseMessage').innerHTML = 'Form submitted successfully!';
-        } else {
-          document.getElementById('responseMessage').innerHTML = 'Submission failed. Please try again.';
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('responseMessage').innerHTML = 'An error occurred. Please try again.';
-      });
-    }
-  </script>
-
+    <h2>Submit Data to Google Sheet</h2>
+    <form id="dataForm" onsubmit="event.preventDefault(); submitForm();">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="role">Role:</label>
+        <input type="text" id="role" name="role" required><br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
 </body>
 </html>
