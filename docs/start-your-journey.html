@@ -45,6 +45,8 @@
             .then(responseData => {
                 // Show a success message
                 document.getElementById("responseMessage").innerText = `Data submitted successfully! Name: ${responseData.name}, Role: ${responseData.role}`;
+                // Optionally, clear the form fields
+                document.getElementById("dataForm").reset();
             })
             .catch(error => {
                 // Show an error message
