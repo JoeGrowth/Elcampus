@@ -110,6 +110,8 @@
 <footer><p>&copy; 2025 Role-to-Entity™. All rights reserved.</p></footer>
 
 <script>
+  const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'; // <-- Replace this!
+
   function previewInput() {
     const name = document.getElementById('name').value.trim();
     const role = document.getElementById('role').value.trim();
@@ -128,8 +130,28 @@
   }
 
   function submitInput() {
-    alert('Form submitted successfully!');
-    // Replace with backend submission logic if needed
+    const name = document.getElementById('name').value.trim();
+    const role = document.getElementById('role').value.trim();
+
+    const data = { name, role };
+
+    fetch(scriptURL, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => {
+      alert("Form submitted successfully!");
+      document.getElementById('previewBox').style.display = 'none';
+      document.getElementById('journeyForm').reset();
+      document.getElementById('journeyForm').style.display = 'flex';
+    })
+    .catch(err => {
+      alert("Submission failed. Try again.");
+      console.error(err);
+    });
   }
 </script>
 </body>
