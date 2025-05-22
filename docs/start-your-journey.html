@@ -1,58 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start Your Journey</title>
+  <meta charset="UTF-8">
+  <title>Form Debugger</title>
 </head>
 <body>
-    <h2>Submitttttt2 Your Info</h2>
-    <form id="dataForm">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
+  <h2>Submit Info</h2>
+  <form id="dataForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
 
-        <label for="role">Role:</label>
-        <input type="text" id="role" name="role" required><br><br>
+    <label for="role">Role:</label>
+    <input type="text" id="role" name="role" required><br><br>
 
-        <button type="submit">Submit</button>
-    </form>
+    <button type="submit">Submit</button>
+  </form>
 
-    <p id="responseMessage"></p>
+  <pre id="responseMessage" style="background:#eee;padding:1em;margin-top:1em;"></pre>
 
-    <script>
-        // Handle form submission
-        document.getElementById("dataForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent form from refreshing the page
+  <script>
+    const form = document.getElementById('dataForm');
+    const output = document.getElementById('responseMessage');
 
-            const name = document.getElementById("name").value;
-            const role = document.getElementById("role").value;
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault();
+      output.textContent = "Submitting...";
 
-            // Create the data object
-            const data = {
-                name: name,
-                role: role
-            };
+      const name = document.getElementById('name').value;
+      const role = document.getElementById('role').value;
 
-            // Use the Google Apps Script Web App URL here (your URL)
-            fetch('https://script.google.com/macros/s/AKfycbweLCA7QHlWiLCSx4rPhKp80ONdGLGPTZqNn8hLvvkUbP-dZgBwace2AvYDqaEV0ZvxBQ/exec', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(responseData => {
-                // Show a success message
-                document.getElementById("responseMessage").innerText = `Data submitted successfully! Name: ${responseData.name}, Role: ${responseData.role}`;
-                // Optionally, clear the form fields
-                document.getElementById("dataForm").reset();
-            })
-            .catch(error => {
-                // Show an error message
-                document.getElementById("responseMessage").innerText = `Error: ${error.message}`;
-            });
+      const data = {
+        name: name,
+        role: role
+      };
+
+      try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxq8jhDjWzvL1awFnpkJVzz78kK4fEKDN691bDDm-zOe_8CnZ_M6F9UhFujpMz0CHwetA/exec', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
         });
-    </script>
+
+        // Check for HTTP errors
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        output.textContent = `✅ Success:\n${JSON.stringify(result, null, 2)}`;
+
+      } catch (err) {
+        // Capture any error details
+        output.textContent = `❌ ERROR:\n${err.message}\n\nFull error:\n${err}`;
+        console.error("Fetch error details:", err);
+      }
+    });
+  </script>
 </body>
 </html>
