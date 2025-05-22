@@ -3,47 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Data</title>
+    <title>Start Your Journey</title>
+</head>
+<body>
+    <h2>Submit Your Info</h2>
+    <form id="dataForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="role">Role:</label>
+        <input type="text" id="role" name="role" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <p id="responseMessage"></p>
+
     <script>
-        function submitForm() {
-            // Get form values
-            var name = document.getElementById('name').value;
-            var role = document.getElementById('role').value;
-            
-            // Create the request payload
-            var data = {
+        // Handle form submission
+        document.getElementById("dataForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form from refreshing the page
+
+            const name = document.getElementById("name").value;
+            const role = document.getElementById("role").value;
+
+            // Create the data object
+            const data = {
                 name: name,
                 role: role
             };
 
-            // Make the POST request to Google Apps Script
-            fetch('https://script.google.com/macros/s/AKfycbybq54h1K6lP-PJBKtcs5qK5VIzEXUlxnWBbIrpzbZ1xrK2ySNWk4XSIcOiFROebl43bQ/exec', {
+            // Use the Google Apps Script Web App URL here (your URL)
+            fetch('https://script.google.com/macros/s/AKfycbxq8jhDjWzvL1awFnpkJVzz78kK4fEKDN691bDDm-zOe_8CnZ_M6F9UhFujpMz0CHwetA/exec', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify(data)
             })
             .then(response => response.json())
             .then(responseData => {
-                alert('Data submitted successfully: ' + JSON.stringify(responseData));
+                // Show a success message
+                document.getElementById("responseMessage").innerText = `Data submitted successfully! Name: ${responseData.name}, Role: ${responseData.role}`;
             })
             .catch(error => {
-                alert('Error submitting data: ' + error);
+                // Show an error message
+                document.getElementById("responseMessage").innerText = `Error: ${error.message}`;
             });
-        }
+        });
     </script>
-</head>
-<body>
-    <h2>Submit Data to Google Sheet</h2>
-    <form id="dataForm" onsubmit="event.preventDefault(); submitForm();">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
-        
-        <label for="role">Role:</label>
-        <input type="text" id="role" name="role" required><br><br>
-        
-        <input type="submit" value="Submit">
-    </form>
 </body>
 </html>
