@@ -135,6 +135,7 @@
 
     const data = { name, role };
 
+    // Use fetch to send POST request to Google Apps Script
     fetch(scriptURL, {
       method: 'POST',
       headers: {
@@ -144,10 +145,14 @@
     })
     .then(response => response.json())
     .then(data => {
-      alert("Form submitted successfully!");
-      document.getElementById('previewBox').style.display = 'none';
-      document.getElementById('journeyForm').reset();
-      document.getElementById('journeyForm').style.display = 'flex';
+      if (data.result === 'success') {
+        alert("Form submitted successfully!");
+        document.getElementById('previewBox').style.display = 'none';
+        document.getElementById('journeyForm').reset();
+        document.getElementById('journeyForm').style.display = 'flex';
+      } else {
+        alert("Submission failed. Try again.");
+      }
     })
     .catch(error => {
       alert("Submission failed. Try again.");
