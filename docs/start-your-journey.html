@@ -110,7 +110,7 @@
 <footer><p>&copy; 2025 Role-to-Entity™. All rights reserved.</p></footer>
 
 <script>
-  const scriptURL = 'YOUR_GOOGLE_APP_SCRIPT_URL'; // <-- Replace this with your Google Apps Script deployment URL
+  const scriptURL = 'YOUR_GOOGLE_APP_SCRIPT_URL'; // <-- Replace this with your actual URL
 
   function previewInput() {
     const name = document.getElementById('name').value.trim();
@@ -130,20 +130,28 @@
   }
 
   function submitInput() {
-    const formData = new FormData();
-    formData.append("name", document.getElementById('name').value.trim());
-    formData.append("role", document.getElementById('role').value.trim());
+    const formData = {
+      name: document.getElementById('name').value.trim(),
+      role: document.getElementById('role').value.trim(),
+    };
 
     fetch(scriptURL, {
       method: 'POST',
-      body: formData
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
     })
     .then(response => response.json())
     .then(result => {
-      alert("Form submitted successfully!");
-      document.getElementById('previewBox').style.display = 'none';
-      document.getElementById('journeyForm').reset();
-      document.getElementById('journeyForm').style.display = 'flex';
+      if (result.result === 'success') {
+        alert("Form submitted successfully!");
+        document.getElementById('previewBox').style.display = 'none';
+        document.getElementById('journeyForm').reset();
+        document.getElementById('journeyForm').style.display = 'flex';
+      } else {
+        alert("Error in submission: " + result.message);
+      }
     })
     .catch(error => {
       alert("Submission failed.");
