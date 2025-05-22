@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Start Your Journey</title>
-  <link rel="stylesheet" href="style.css" />
   <style>
+    /* Add styles here for your form, buttons, etc. */
     body {
       font-family: sans-serif;
       margin: 0;
@@ -110,7 +110,7 @@
 <footer><p>&copy; 2025 Role-to-Entity™. All rights reserved.</p></footer>
 
 <script>
-  const scriptURL = 'YOUR_GOOGLE_APP_SCRIPT_URL'; // <-- Replace this with your actual URL
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbyDfLwPZ28o_w-h1L_t_JqcToPV73wFxQVvy07T_WCc/dev';
 
   function previewInput() {
     const name = document.getElementById('name').value.trim();
@@ -130,32 +130,28 @@
   }
 
   function submitInput() {
-    const formData = {
-      name: document.getElementById('name').value.trim(),
-      role: document.getElementById('role').value.trim(),
-    };
+    const name = document.getElementById('name').value.trim();
+    const role = document.getElementById('role').value.trim();
+
+    const data = { name, role };
 
     fetch(scriptURL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(data),
     })
     .then(response => response.json())
-    .then(result => {
-      if (result.result === 'success') {
-        alert("Form submitted successfully!");
-        document.getElementById('previewBox').style.display = 'none';
-        document.getElementById('journeyForm').reset();
-        document.getElementById('journeyForm').style.display = 'flex';
-      } else {
-        alert("Error in submission: " + result.message);
-      }
+    .then(data => {
+      alert("Form submitted successfully!");
+      document.getElementById('previewBox').style.display = 'none';
+      document.getElementById('journeyForm').reset();
+      document.getElementById('journeyForm').style.display = 'flex';
     })
     .catch(error => {
-      alert("Submission failed.");
-      console.error("Error:", error);
+      alert("Submission failed. Try again.");
+      console.error('Error:', error);
     });
   }
 </script>
