@@ -1,49 +1,155 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Test Google Sheets Submit</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Start Your Journey</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+      color: #333;
+    }
+    header, footer {
+      background: #222;
+      color: #fff;
+      padding: 1em 2em;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1em;
+      padding: 0;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+    }
+    main {
+      padding: 2em;
+      background: #fff;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      max-width: 600px;
+    }
+    .input-row {
+      display: flex;
+      gap: 1em;
+      align-items: center;
+    }
+    .input-row label {
+      width: 80px;
+    }
+    .input-row input {
+      flex: 1;
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .btn {
+      padding: 0.5em 1em;
+      border: none;
+      border-radius: 4px;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    .btn.modify {
+      background: #ffc107;
+    }
+    .preview {
+      margin-top: 1em;
+      padding: 1em;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+    }
+  </style>
 </head>
 <body>
-  <h2>Test Submission to Google Sheet</h2>
-  <form id="testForm">
-    <label for="name">Name:</label>
-    <input type="text" id="name" required><br><br>
-    
-    <label for="role">Role:</label>
-    <input type="text" id="role" required><br><br>
-    
-    <button type="submit">Submit</button>
-  </form>
+<header>
+  <h1>Role-to-Entity™ Platform</h1>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="how-it-works.html">How It Works</a></li>
+      <li><a href="start-your-journey.html">Start</a></li>
+      <li><a href="case-studies.html">Case Studies</a></li>
+      <li><a href="work-with-us.html">Work With Us</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+  <section>
+    <h2>Apply to Begin</h2>
+    <form id="journeyForm">
+      <div class="input-row">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required />
+      </div>
+      <div class="input-row">
+        <label for="role">Your Role:</label>
+        <input type="text" id="role" required />
+      </div>
+      <button type="button" class="btn" onclick="previewInput()">Preview</button>
+    </form>
 
-  <script>
-    const form = document.getElementById('testForm');
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwshEuT_811As-HrnBIedg6pmPF4oewQGPBm7KT7QWCA68Wz8O4nbMyQuN6N3TJmCpHQA/exec';
+    <div class="preview" id="previewBox" style="display:none;">
+      <p><strong>Name:</strong> <span id="previewName"></span></p>
+      <p><strong>Role:</strong> <span id="previewRole"></span></p>
+      <button class="btn modify" onclick="modifyInput()">Modify</button>
+      <button class="btn" onclick="submitInput()">Submit</button>
+    </div>
+  </section>
+</main>
+<footer><p>&copy; 2025 Role-to-Entity™. All rights reserved.</p></footer>
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
+<script>
+  const scriptURL = 'YOUR_GOOGLE_APP_SCRIPT_URL'; // <-- Replace this with your Google Apps Script deployment URL
 
-      const data = {
-        name: document.getElementById('name').value,
-        role: document.getElementById('role').value
-      };
+  function previewInput() {
+    const name = document.getElementById('name').value.trim();
+    const role = document.getElementById('role').value.trim();
 
-      fetch(scriptURL, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.json())
-      .then(result => {
-        alert('✅ Submitted successfully');
-        console.log(result);
-      })
-      .catch(error => {
-        alert('❌ Submission failed');
-        console.error('Error!', error.message);
-      });
+    if (name && role) {
+      document.getElementById('previewName').innerText = name;
+      document.getElementById('previewRole').innerText = role;
+      document.getElementById('journeyForm').style.display = 'none';
+      document.getElementById('previewBox').style.display = 'block';
+    }
+  }
+
+  function modifyInput() {
+    document.getElementById('previewBox').style.display = 'none';
+    document.getElementById('journeyForm').style.display = 'flex';
+  }
+
+  function submitInput() {
+    const formData = new FormData();
+    formData.append("name", document.getElementById('name').value.trim());
+    formData.append("role", document.getElementById('role').value.trim());
+
+    fetch(scriptURL, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+      alert("Form submitted successfully!");
+      document.getElementById('previewBox').style.display = 'none';
+      document.getElementById('journeyForm').reset();
+      document.getElementById('journeyForm').style.display = 'flex';
+    })
+    .catch(error => {
+      alert("Submission failed.");
+      console.error("Error:", error);
     });
-  </script>
+  }
+</script>
 </body>
 </html>
