@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: elcampus-backend
+    env: python
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "python backend/app.py"
+    region: oregon
+    plan: free
+    branch: main  # or master if that's your default branch
