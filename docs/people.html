@@ -131,7 +131,8 @@
   <!-- Modal Form -->
   <div class="modal" id="personModal">
     <div class="modal-content">
-      <input type="text" id="picUrl" placeholder="Picture URL">
+      <input type="file" id="picFile" accept="image/*">
+      <img id="previewImage" src="" alt="Preview" style="width: 80px; height: 80px; border-radius: 50%; margin: 10px auto; display: none;">
       <input type="text" id="name" placeholder="Name">
       <input type="text" id="role" placeholder="Role">
       <input type="text" id="link" placeholder="Link to Know the Person">
