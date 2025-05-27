@@ -1,1 +1,41 @@
-<!DOCTYPE html> <html lang='en'> <head> <meta charset='UTF-8' /> <meta name='viewport' content='width=device-width, initial-scale=1.0' /> <title>Start Your Journey</title> <link rel='stylesheet' href='style.css' /> </head> <body> <header> <h1>Role-to-Entity™ Platform</h1> <nav> <ul> <li><a href='index.html'>Home</a></li> <li><a href='how-it-works.html'>How It Works</a></li> <li><a href='start-your-journey.html'>Start</a></li> <li><a href='case-studies.html'>Case Studies</a></li> <li><a href='work-with-us.html'>Work With Us</a></li> <li><a href='about.html'>About</a></li> </ul> </nav> </header> <main> <section><h2>Apply to Begin</h2><form><label>Name:</label><input type='text' /><br><label>Your Role:</label><input type='text' /><br><button type='submit'>Submit</button></form></section> </main> <footer><p>&copy; 2025 Role-to-Entity™. All rights reserved.</p></footer> <script src='script.js'></script> </body> </html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Start Your Journey</title>
+</head>
+<body>
+  <form id="journeyForm">
+    <label>Name: <input type="text" name="name" required></label><br><br>
+    <label>Your Role: <input type="text" name="role" required></label><br><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+    const form = document.getElementById('journeyForm');
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      fetch('https://script.google.com/macros/s/AKfycbzIRck2M-hIN1gtG8G7ZlV4tnhVHWLukujZJlNdaexuk_7hjPWTyxg4i0KYlSsztqCfzQ/exec', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.result === 'success') {
+          document.getElementById('response').textContent = `Thanks, ${data.name}! Your role (${data.role}) was recorded.`;
+          form.reset();
+        } else {
+          document.getElementById('response').textContent = 'Error: ' + (data.message || 'Unknown error');
+        }
+      })
+      .catch(error => {
+        document.getElementById('response').textContent = 'Request failed: ' + error.message;
+      });
+    });
+  </script>
+</body>
+</html>
