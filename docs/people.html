@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Our People</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meet Our People</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -109,6 +109,15 @@
       background: #dc3545;
       margin-top: 10px;
     }
+
+    #previewImage {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 10px auto;
+      display: none;
+      object-fit: cover;
+    }
   </style>
 </head>
 <body>
@@ -117,7 +126,7 @@
   <button class="add-button" onclick="openModal()">Add a Person</button>
 
   <div class="grid-container" id="peopleGrid">
-    <!-- Initial person example -->
+    <!-- Example person -->
     <div class="person-card">
       <img src="https://via.placeholder.com/100" alt="Youssef">
       <div class="person-name">Youssef</div>
@@ -128,64 +137,21 @@
     </div>
   </div>
 
-  <!-- Modal Form -->
+  <!-- Modal -->
   <div class="modal" id="personModal">
     <div class="modal-content">
-      <input type="file" id="picFile" accept="image/*">
-      <img id="previewImage" src="" alt="Preview" style="width: 80px; height: 80px; border-radius: 50%; margin: 10px auto; display: none;">
-      <input type="text" id="name" placeholder="Name">
-      <input type="text" id="role" placeholder="Role">
-      <input type="text" id="link" placeholder="Link to Know the Person">
+      <input type="file" id="picFile" accept="image/*" />
+      <img id="previewImage" src="" alt="Preview" />
+      <input type="text" id="name" placeholder="Name" />
+      <input type="text" id="role" placeholder="Role" />
+      <input type="text" id="link" placeholder="Link to Know the Person" />
       <button onclick="addPerson()">Save</button>
       <button class="close-btn" onclick="closeModal()">Cancel</button>
     </div>
   </div>
 
-  <script>
-    function openModal() {
-      document.getElementById("personModal").style.display = "flex";
-    }
-
-    function closeModal() {
-      document.getElementById("personModal").style.display = "none";
-    }
-
-    function addPerson() {
-      const pic = document.getElementById("picUrl").value || "https://via.placeholder.com/100";
-      const name = document.getElementById("name").value;
-      const role = document.getElementById("role").value;
-      const link = document.getElementById("link").value;
-
-      if (!name || !role || !link) {
-        alert("Please fill all fields!");
-        return;
-      }
-
-      const container = document.getElementById("peopleGrid");
-
-      const card = document.createElement("div");
-      card.className = "person-card";
-
-      card.innerHTML = `
-        <img src="${pic}" alt="${name}">
-        <div class="person-name">${name}</div>
-        <div class="person-role">${role}</div>
-        <div class="person-link">
-          <a href="${link}" target="_blank">Know the person</a>
-        </div>
-      `;
-
-      container.appendChild(card);
-
-      closeModal();
-
-      // Reset fields
-      document.getElementById("picUrl").value = "";
-      document.getElementById("name").value = "";
-      document.getElementById("role").value = "";
-      document.getElementById("link").value = "";
-    }
-  </script>
+  <!-- External JS -->
+  <script src="script.js"></script>
 
 </body>
 </html>
