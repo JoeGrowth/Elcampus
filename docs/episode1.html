@@ -16,7 +16,7 @@
     if (!user) {
       document.getElementById("episodeInfo").textContent = "User not found.";
     } else {
-      fetch("https://script.google.com/macros/s/AKfycbyRD05uTg-yl5Y-nIiKkm__LyWKj1hTrjuk4OV8LGFzlZ2sumQlVrbvELYYn6vZmPJMoQ/exec?user=" + encodeURIComponent(user))
+      fetch("https://script.google.com/macros/s/AKfycbzv0grYx9rU4Ik12ZoMIq4FIAsEUDmzFtc0jbJs9ChpeBO28XQxnZOBUgmH_MPeS4_QHQ/exec?user=" + encodeURIComponent(user))
         .then(res => res.json())
         .then(data => {
           if (data.result === "success") {
