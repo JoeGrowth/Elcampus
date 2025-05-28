@@ -1,21 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>Episode 1</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1 id="welcome">Welcome!</h1>
-  <p>This is your Episode 1 page.</p>
+  <p id="episodeInfo">Loading your progress...</p>
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const user = params.get('user');
-    if (user) {
-      document.getElementById('welcome').textContent = `Welcome, ${user}!`;
-      // You can add more custom content or logic here based on user
+    const user = params.get("user");
+
+    if (!user) {
+      document.getElementById("episodeInfo").textContent = "User not found.";
     } else {
-      document.getElementById('welcome').textContent = `Welcome, Guest!`;
+      fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_ID/exec?user=" + encodeURIComponent(user))
+        .then(res => res.json())
+        .then(data => {
+          if (data.result === "success") {
+            document.getElementById("welcome").textContent = `Welcome, ${data.name}!`;
+            document.getElementById("episodeInfo").innerHTML = `
+              You're on <strong>Episode ${data.episode}</strong><br>
+              Your progress: <strong>${data.progress}</strong>
+            `;
+          } else {
+            document.getElementById("episodeInfo").textContent = data.message;
+          }
+        })
+        .catch(err => {
+          document.getElementById("episodeInfo").textContent = "Failed to load data: " + err.message;
+        });
     }
   </script>
 </body>
