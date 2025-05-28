@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Episode 1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1 id="welcome">Welcome!</h1>
+  <p>This is your Episode 1 page.</p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const user = params.get('user');
+    if (user) {
+      document.getElementById('welcome').textContent = `Welcome, ${user}!`;
+      // You can add more custom content or logic here based on user
+    } else {
+      document.getElementById('welcome').textContent = `Welcome, Guest!`;
+    }
+  </script>
+</body>
+</html>
