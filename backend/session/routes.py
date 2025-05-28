@@ -1,17 +1,33 @@
 from flask import Blueprint, request, jsonify, session
 
-session_routes = Blueprint('session_routes', __name__)
+journey_bp = Blueprint('journey', __name__)
 
-@session_routes.route('/progress', methods=['POST'])
-def save_progress():
-    if 'username' not in session:
-        return jsonify({'message': 'Not logged in'}), 403
-    progress = request.get_json()
-    session['progress'] = progress
-    return jsonify({'message': 'Progress saved'})
+# Sample episode logic
+ROLE_EPISODES = {
+    "to design": ["Episode 1: Define Vision", "Episode 2: Build Design System"],
+    "to secure": ["Episode 1: Identify Leads", "Episode 2: Sales Pitch System"]
+}
 
-@session_routes.route('/progress', methods=['GET'])
-def get_progress():
-    if 'username' not in session:
-        return jsonify({'message': 'Not logged in'}), 403
-    return jsonify({'progress': session.get('progress', {})})
+@journey_bp.route('/api/start-journey', methods=['POST'])
+def start_journey():
+    name = request.form.get('name')
+    role = request.form.get('role').strip().lower()
+
+    if not name or not role:
+        return jsonify({"result": "error", "message": "Missing name or role"}), 400
+
+    episodes = ROLE_EPISODES.get(role, ["Episode 1: Custom Journey Coming Soon"])
+
+    # Store in session (or later: DB)
+    session['user'] = {
+        "name": name,
+        "role": role,
+        "episodes": episodes
+    }
+
+    return jsonify({
+        "result": "success",
+        "name": name,
+        "role": role,
+        "episodes": episodes
+    })
